@@ -1,46 +1,120 @@
-var products = [{ "id": 101, "name": "Basket Ball", "image": "basketball.png", "price": 150 }, { "id": 102, "name": "Football", "image": "football.png", "price": 120 }, { "id": 103, "name": "Soccer", "image": "soccer.png", "price": 110 }, { "id": 104, "name": "Table Tennis", "image": "table-tennis.png", "price": 130 }, { "id": 105, "name": "Tennis", "image": "tennis.png", "price": 100 }];
-$(document).ready(function(){
 
-$("#prodcollection").on("click",function(){
-    productss();
+var products = [
+    { id: 101, name: "Basket Ball", image: "basketball.png", price: 150 },
+    { id: 102, name: "Football", image: "football.png", price: 120 },
+    { id: 103, name: "Soccer", image: "soccer.png", price: 110 },
+    { id: 104, name: "Table Tennis", image: "table-tennis.png", price: 130 },
+    { id: 105, name: "Tennis", image: "tennis.png", price: 100 },
+  ];
+  
+  cart=[];
+   $(document).ready(function(){   
+          display();
+          displaycart();
+  
+      $(".add-to-cart").on("click",function(){
+  
+      console.log("click");
+      var id1 =$(this).parent("div").attr("id");
+       console.log(id1);
+       var oid=id1.substring(8);
+       console.log(oid);
+       addtocart(oid);
+       console.log(cart);
+       displaycart();
+       //correct
+       $("#result").on("click", ".update",function(){
+           var pid= $(this).data(pid);
+          console.log(pid);
+          var product=getProduct(pid);
+          console.log(product);
+          $('#pid').val()
+       })
+       $("#but").on("click",function(){
 
-})
+           emptycart();
+       })
+  
+      
+         
+      
+      })
+      });
+       
+  
+      function display(){
+      var temp=" ";
+      for(var i=0;i<products.length;i++){
+  
+          temp+='<div id='+"product-"+products[i].id+' class='+"product"+'><img src=images/'+products[i].image+'><h3 class='+"title"+'><a href="#">'+products[i].name+'</a></h3><span>'+products[i].price+'</span><a class='+"add-to-cart"+' href="#">Add To Cart</a></div>';
+      
+      }
+      $("#products").html(temp);
+  
+      
+  }
+      
+          
+          
+      
+      function addtocart(oid){
+  
+          for(var i=0;i<products.length;i++){
+              isBroken=false;
+          if(products[i].id==oid){
+              console.log(cart.length);
+              for(var j=0;j<cart.length;j++){
+              if(cart.length>0 && cart[j].id==oid){
+                  cart[j].quantity++;
+                  isBroken=true;
+                  break;            
+              }
+          } if(!isBroken){
+              var obj={};
+              obj.id=products[i].id;
+              obj.name=products[i].name;
+              obj.price=products[i].price;
+              obj.quantity=1;
+              cart.push(obj)}   
+              }
+      }
+  }
+  function displaycart()
+  {
+      
+          var html1=" ";
+          var grandT=0
+          html1+='<table><tr><th>ID</th><th>Name</th><th>Price</th><th>Quantity</th><th>Action</th><tr>';
+          for(var i=0;i<cart.length;i++){
+              grandT+=(cart[i].price*cart[i].quantity);
+              
+              html1+="<tr><td>"+cart[i].id+"</td><td>"+cart[i].name+"</td><td>"+cart[i].price+"<td>"+cart[i].quantity+"</td><td><a href='#' class='delete' id="+cart[i].id+"  onclick='deleteRow("+cart[i].id+")'  >Delete</a></td></tr>";
+          }
+          html1+'<tr></tr>';
+          html1+='<tr><td></td><td></td><th>Total</th><td>'+grandT+'</td>'
+          html1 += '</table>';
+          $("#result").html(html1);
+      }
+
+      function deleteRow(id){
+          for(var i=0; i<cart.length;i++){  
+            if (cart[i].id==id){
+                if(cart[i].quantity>1){
+                    cart[i].quantity--;
+                } 
+                else{
+                cart.splice(i,1);
+                }
+            }
 
 
-});
-function  productss (){
-var temp=" ";
-temp+='<div id="product-101" class="product">\
-<img src="images/football.png">\
-<h3 class="title"><a href="#">Product 101</a></h3>\
-<span>Price: $150.00</span>\
-<a class="add-to-cart" href="#">Add To Cart</a>\
-</div>\
-<div id="product-101" class="product">\
-<img src="images/tennis.png">\
-<h3 class="title"><a href="#">Product 102</a></h3>\
-<span>Price: $120.00</span>\
-<a class="add-to-cart" href="#">Add To Cart</a>\
-</div>\
-<div id="product-101" class="product">\
-<img src="images/basketball.png">\
-<h3 class="title"><a href="#">Product 103</a></h3>\
-<span>Price: $90.00</span>\
-<a class="add-to-cart" href="#">Add To Cart</a>\
-</div>\
-<div id="product-101" class="product">\
-<img src="images/table-tennis.png">\
-<h3 class="title"><a href="#">Product 104</a></h3>\
-<span>Price: $110.00</span>\
-<a class="add-to-cart" href="#">Add To Cart</a>\
-</div>\
-<div id="product-101" class="product">\
-<img src="images/soccer.png">\
-<h3 class="title"><a href="#">Product 105</a></h3>\
-<span>Price: $80.00</span>\
-<a class="add-to-cart" href="#">Add To Cart</a>\
-</div>';
+          }
+          displaycart();
+      }
+  
+  function emptycart(){
+      cart=[];
+      displaycart();
 
-$("#products").html(temp);
-
-}
+  }
+   

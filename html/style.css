@@ -143,3 +143,6 @@ body{
 	border-radius: 5px;
 	border: 1px solid #cccccc; 
 }
+table tr,th,td {
+	padding: 20px;
+}
